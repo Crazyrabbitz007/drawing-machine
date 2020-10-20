@@ -10,7 +10,7 @@ let reveal = false;
 
 function preload() {
 
-  flower = loadImage('clipart568092.png');
+  flower = loadImage('universe.png');
 }
 
 function setup() {
