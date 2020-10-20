@@ -10,11 +10,11 @@ let reveal = false;
 
 function preload() {
 
-  universe = loadImage('universe.jpg');
+  universe = loadImage('universe.png');
 }
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(windowWidth,windowHeight);
 
   // create graphics - these are basically separate canvases drawn to an off-screen graphics buffer
   o = createGraphics(400, 400);
