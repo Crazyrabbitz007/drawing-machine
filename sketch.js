@@ -1,58 +1,75 @@
-let slider;
-let r = 100;
-let g = 100;
-let b = 100;
+// draw to an offscreen graphic so that you can have multiple layers
 
+let universe;
+let o; // outline
+let p; // painting
+let switchButton;
+let revealButton;
+let mode = "outline";
+let reveal = false;
 
+function preload() {
+
+  universe = loadImage('universe.jpg');
+}
 
 function setup() {
   createCanvas(400, 400);
 
-  strokeWeight(5);
+  // create graphics - these are basically separate canvases drawn to an off-screen graphics buffer
+  o = createGraphics(400, 400);
+  o.clear(); // clear the background of the outline graphics so it is transparent
 
-  background(220);
+  p = createGraphics(400, 400);
+  p.background(255); // set painting background to white
 
-  createP("stroke weight:");
-  slider = createSlider(0, 30, 5);
+  switchButton = createButton("start coloring");
+  switchButton.mousePressed(startColoring);
 
-
+  revealButton = createButton("reveal");
+  revealButton.mousePressed(revealPainting);
 }
 
 function draw() {
 
-  let lineWidth = slider.value();
-  strokeWeight(lineWidth);
-
-  stroke(r, g, b);
-
-  // check to see if a key is pressed
-  if (keyIsPressed === true) {
-    // nested if statement checks to see what key is pressed
-    if (key === 'a') {
-      // increase 'r'
-      r += 5;
-    } else if (key === 's') {
-      // increase 'g'
-      g += 5;
-    } else if (key === 'd') {
-      //increase 'b'
-      b += 5;
-    } else if (key === 'z') {
-      //decrease 'r'
-      r -= 5;
-    } else if (key === 'x') {
-      //decrease 'g'
-      g -= 5
-    } else if (key === 'c') {
-      // increase 'b'
-      b -= 5;
+  if (mode === "outline") {
+    o.stroke(0);
+    o.strokeWeight(3);
+    // if in outline mode, mouse pressed draws to the o (outline) off-screen graphic
+    if (mouseIsPressed) {
+      o.line(pmouseX, pmouseY, mouseX, mouseY);
     }
+  } else if (mode === 'color') {
+    p.stroke(200, 255, 215);
+    p.strokeWeight(10);
+        // if in painting mode, mouse pressed draws to the p (painting) graphic
+    if (mouseIsPressed) {
+      p.line(pmouseX, pmouseY, mouseX, mouseY);
+    }
+
   }
 
 
-  if (mouseIsPressed) {
-    line(pmouseX, pmouseY, mouseX, mouseY);
+  // only displays outline if you haven't revealed the painting underneath
+  if (reveal) {
+    image(p, 0, 0); // only draw painting
+  } else {
+    // draw painting and outline above it
+    image(p, 0, 0);
+    image(o, 0, 0);
   }
+}
 
+
+function startColoring() {
+  mode = 'color';
+}
+
+function revealPainting() {
+  clear(); // clear out canvas so outline doesn't show
+  reveal = true; // toggle reveal so outline isn't drawn
+
+  // this is how you would save the graphics
+  // save(p, 'painting.jpg');
 
 }
