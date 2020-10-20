@@ -1,6 +1,6 @@
 // draw to an offscreen graphic so that you can have multiple layers
 
-let universe;
+let flower;
 let o; // outline
 let p; // painting
 let switchButton;
@@ -10,17 +10,17 @@ let reveal = false;
 
 function preload() {
 
-  universe = loadImage('universe.png');
+  flower = loadImage('clipart568092.png');
 }
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
 
   // create graphics - these are basically separate canvases drawn to an off-screen graphics buffer
-  o = createGraphics(400, 400);
+  o = createGraphics(windowWidth, windowHeight);
   o.clear(); // clear the background of the outline graphics so it is transparent
 
-  p = createGraphics(400, 400);
+  p = createGraphics(windowWidth, windowHeight);
   p.background(255); // set painting background to white
 
   switchButton = createButton("start coloring");
