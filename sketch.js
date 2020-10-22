@@ -1,16 +1,17 @@
 // draw to an offscreen graphic so that you can have multiple layers
 
-let flower;
+let universe;
 let o; // outline
 let p; // painting
 let switchButton;
 let revealButton;
 let mode = "outline";
 let reveal = false;
+let noiseOffset = 0.0;
 
 function preload() {
 
-  flower = loadImage('universe.png');
+  universe = loadImage('universe.png');
 }
 
 function setup() {
@@ -21,7 +22,7 @@ function setup() {
   o.clear(); // clear the background of the outline graphics so it is transparent
 
   p = createGraphics(windowWidth, windowHeight);
-  p.background(255); // set painting background to white
+  p.background(255,255,255,5); // set painting background to white
 
   switchButton = createButton("start coloring");
   switchButton.mousePressed(startColoring);
@@ -31,6 +32,11 @@ function setup() {
 }
 
 function draw() {
+  strokeWeight(strokeWidth);
+  noiseOffset += 0.05;
+  strokeWidth = noise (noiseOffset)*100;
+
+
 
   if (mode === "outline") {
     o.stroke(0);
