@@ -1,54 +1,80 @@
 // draw to an offscreen graphic so that you can have multiple layers
-
-let universe;
+var prompts = ["Rabbit", "Rain", "Rocks", "Rat", "Rhino","Racoon"];
 let o; // outline
 let p; // painting
-let switchButton;
-let revealButton;
 let mode = "outline";
 let reveal = false;
 let noiseOffset = 0.0;
-
-function preload() {
-
-  universe = loadImage('universe.png');
-}
+let strokeWidth = 5;
+let switchButton;
+let revealButton;
+let promptButton;
+let saveButton;
+let saveallButton;
+let sizeSlider;
+let redSlider;
+let blueSlider;
+let greenSlider;
 
 function setup() {
-  createCanvas(windowWidth,windowHeight);
+  createCanvas(windowWidth, windowHeight);
 
   // create graphics - these are basically separate canvases drawn to an off-screen graphics buffer
   o = createGraphics(windowWidth, windowHeight);
   o.clear(); // clear the background of the outline graphics so it is transparent
 
   p = createGraphics(windowWidth, windowHeight);
-  p.background(255,255,255,5); // set painting background to white
+  p.background(255, 255, 255, 5); // set painting background to white
 
-  switchButton = createButton("start coloring");
+  sizeSlider = createSlider(0, 50, 15);
+  sizeSlider.position(50, height * 0.80);
+
+  redSlider = createSlider(0, 255, 10);
+  redSlider.position(50, height * 0.80 + 50);
+
+  blueSlider = createSlider(0, 255, 10);
+  blueSlider.position(50, height * 0.80 + 80);
+
+  greenSlider = createSlider(0, 255, 10);
+  greenSlider.position(50, height * 0.80 + 110);
+
+  promptButton = createButton("Click to Receive a Prompt");
+  promptButton.mousePressed(randomPrompt);
+
+  switchButton = createButton("Start Coloring");
   switchButton.mousePressed(startColoring);
 
-  revealButton = createButton("reveal");
+  revealButton = createButton("Reveal");
   revealButton.mousePressed(revealPainting);
+
+  saveButton = createButton("Save your Painting!");
+  saveButton.mousePressed(savePainting);
+
+  saveallButton = createButton("Save your Painting! + Outline");
+  saveallButton.mousePressed(saveallPainting);
 }
 
 function draw() {
-  strokeWeight(strokeWidth);
-  noiseOffset += 0.05;
-  strokeWidth = noise (noiseOffset)*100;
-
-
+  push();
+  text('Stroke',15,height* 0.80 +15);
+  text('Red', 15, height * 0.80 + 65);
+  text('Green', 15, height * 0.80 + 95);
+  text('Blue', 15, height * 0.80 + 125);
+  pop();
 
   if (mode === "outline") {
     o.stroke(0);
-    o.strokeWeight(3);
+    o.strokeWeight(sizeSlider.value());
     // if in outline mode, mouse pressed draws to the o (outline) off-screen graphic
     if (mouseIsPressed) {
       o.line(pmouseX, pmouseY, mouseX, mouseY);
     }
   } else if (mode === 'color') {
-    p.stroke(200, 255, 215);
-    p.strokeWeight(10);
-        // if in painting mode, mouse pressed draws to the p (painting) graphic
+    p.stroke(redSlider.value(),blueSlider.value(),greenSlider.value());
+    p.strokeWeight(sizeSlider.value());
+    noiseOffset += 0.05;
+    strokeWidth = noise(noiseOffset * 100)
+    // if in painting mode, mouse pressed draws to the p (painting) graphic
     if (mouseIsPressed) {
       p.line(pmouseX, pmouseY, mouseX, mouseY);
     }
@@ -66,9 +92,17 @@ function draw() {
   }
 }
 
+function randomPrompt() {
+  randomword = random(prompts); //pick a random word!
+  push();
+  text(randomword, width / 2, height / 2);
+  textFont("Arial", 72);
+  pop();
+}
 
 function startColoring() {
   mode = 'color';
+
 }
 
 function revealPainting() {
@@ -78,4 +112,12 @@ function revealPainting() {
   // this is how you would save the graphics
   // save(p, 'painting.jpg');
 
+}
+
+function savePainting() {
+  save(p, 'painting.jpg');
+}
+
+function saveallPainting() {
+  save('painting+outline');
 }
