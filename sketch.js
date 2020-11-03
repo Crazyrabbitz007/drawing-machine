@@ -1,5 +1,5 @@
 // draw to an offscreen graphic so that you can have multiple layers
-var prompts = ["Rabbit", "Rain", "Rocks", "Rat", "Rhino","Racoon"];
+var prompts = ["Rabbit Sleeping", "Rain on a Street", "Rocks in a River", "Rat at Night", "Rhino in a Field","Racoon on a Garbage Can"];
 let o; // outline
 let p; // painting
 let mode = "outline";
